@@ -1,0 +1,39 @@
+
+name: NOVA FPS BOOSTER Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract source
+        run: unzip -q NOVA-FPS-BOOSTER-v0.1.0-source.zip
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.2.1'
+
+      - name: Build NOVA
+        run: |
+          cd NOVA-FPS-BOOSTER
+          gradle build
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: NOVA-FPS-BOOSTER-JAR
+          path: NOVA-FPS-BOOSTER/build/libs/*.jar
+          
